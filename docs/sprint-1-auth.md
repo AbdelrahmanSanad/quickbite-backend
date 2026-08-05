@@ -15,21 +15,21 @@ authentication.
 
 ## Epic 1: User Registration
 
-### Feature 1.1 — Register User
+### Feature 1.1 — Register User ✅
 
-- [ ] Initialize Auth Module
-- [ ] Configure PostgreSQL & Prisma
-- [ ] Configure Redis
-- [ ] Create User Entity
-- [ ] Create Register DTO
-- [ ] Validate Request
-- [ ] Check Email Uniqueness
-- [ ] Hash Password (Argon2)
-- [ ] Save User (Status = PENDING)
-- [ ] Generate Email Verification Token
-- [ ] Store Verification Token in Redis (TTL 24h)
-- [ ] Publish `UserRegistered` Event
-- [ ] Return Success Response
+- [x] Initialize Auth Module
+- [x] Configure PostgreSQL & Prisma
+- [x] Configure Redis
+- [x] Create User Entity
+- [x] Create Register DTO
+- [x] Validate Request
+- [x] Check Email Uniqueness
+- [x] Hash Password (Argon2)
+- [x] Save User (Status = PENDING)
+- [x] Generate Email Verification Token
+- [x] Store Verification Token in Redis (TTL 24h)
+- [x] Publish `UserRegistered` Event
+- [x] Return Success Response
 
 ### Feature 1.2 — Verify Email
 
