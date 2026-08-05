@@ -1,0 +1,19 @@
+# Keep build context small and never bake secrets/artifacts into images.
+**/node_modules
+**/dist
+**/build
+**/.next
+**/.turbo
+**/coverage
+
+# Secrets — provided at runtime via compose, never copied in.
+**/.env
+**/.env.*
+
+# VCS / editor / OS
+.git
+.gitignore
+**/.vscode
+**/.idea
+**/*.log
+**/.DS_Store

@@ -1,0 +1,25 @@
+{
+  "name": "quickbite-backend",
+  "version": "0.0.0",
+  "private": true,
+  "description": "QuickBite Backend — production-grade food delivery platform (NestJS microservices monorepo).",
+  "workspaces": [
+    "services/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "turbo": "^2.5.0"
+  },
+  "packageManager": "npm@11.13.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

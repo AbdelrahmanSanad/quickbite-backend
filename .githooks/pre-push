@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# QuickBite pre-push quality gate.
+# Blocks a push unless lint + build + test pass for the affected workspaces.
+# Enabled via: git config core.hooksPath .githooks
+#
+# Bypass is intentionally NOT documented — do not push red code.
+set -euo pipefail
+
+echo "──────────────────────────────────────────────"
+echo " pre-push: running quality gate (lint · build · test)"
+echo "──────────────────────────────────────────────"
+
+# Run from the repo root regardless of where git invoked the hook.
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+# Turborepo runs the tasks in dependency order and caches unchanged work,
+# so this is fast on repeat pushes. Any non-zero exit aborts the push.
+npx turbo run lint build test
+
+echo "──────────────────────────────────────────────"
+echo " pre-push: quality gate PASSED ✔  — pushing"
+echo "──────────────────────────────────────────────"

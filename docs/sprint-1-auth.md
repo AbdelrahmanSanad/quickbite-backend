@@ -1,0 +1,160 @@
+# Sprint 1 — Auth Service
+
+> **Status tracking:** each task is a checkbox. `[ ]` = todo, `[x]` = done.
+> A feature is "done" when all its tasks are checked, its build/lint/tests pass,
+> and its PR is merged. The `next-auth-feature` skill reads this file to pick the
+> next unstarted feature and checks tasks off as it completes them.
+
+## 🎯 Goal
+
+Build a secure authentication service that supports user registration, login,
+session management, email verification, password reset, and JWT-based
+authentication.
+
+---
+
+## Epic 1: User Registration
+
+### Feature 1.1 — Register User
+
+- [ ] Initialize Auth Module
+- [ ] Configure PostgreSQL & Prisma
+- [ ] Configure Redis
+- [ ] Create User Entity
+- [ ] Create Register DTO
+- [ ] Validate Request
+- [ ] Check Email Uniqueness
+- [ ] Hash Password (Argon2)
+- [ ] Save User (Status = PENDING)
+- [ ] Generate Email Verification Token
+- [ ] Store Verification Token in Redis (TTL 24h)
+- [ ] Publish `UserRegistered` Event
+- [ ] Return Success Response
+
+### Feature 1.2 — Verify Email
+
+- [ ] Verify Token from Redis
+- [ ] Activate User
+- [ ] Mark Email as Verified
+- [ ] Delete Verification Token
+- [ ] Return Success Response
+
+---
+
+## Epic 2: Authentication
+
+### Feature 2.1 — Login
+
+- [ ] Validate Credentials
+- [ ] Check User Status
+- [ ] Check Email Verified
+- [ ] Verify Password
+- [ ] Generate Access Token
+- [ ] Generate Refresh Token
+- [ ] Hash Refresh Token
+- [ ] Save Session
+- [ ] Return Tokens
+
+### Feature 2.2 — Refresh Token
+
+- [ ] Validate Refresh Token
+- [ ] Verify Stored Hash
+- [ ] Rotate Refresh Token
+- [ ] Update Session
+- [ ] Return New Tokens
+
+### Feature 2.3 — Logout
+
+- [ ] Revoke Current Session
+- [ ] Remove Refresh Token
+- [ ] Return Success
+
+### Feature 2.4 — Logout All Devices
+
+- [ ] Revoke All Sessions
+- [ ] Return Success
+
+---
+
+## Epic 3: Password Recovery
+
+### Feature 3.1 — Forgot Password
+
+- [ ] Validate Email
+- [ ] Generate OTP
+- [ ] Store OTP in Redis (TTL 10 min)
+- [ ] Publish `PasswordResetRequested` Event
+- [ ] Return Success
+
+### Feature 3.2 — Reset Password
+
+- [ ] Validate OTP
+- [ ] Hash New Password
+- [ ] Update Password
+- [ ] Revoke All Sessions
+- [ ] Delete OTP
+- [ ] Return Success
+
+---
+
+## Epic 4: Session Management
+
+- [ ] Create Session Entity
+- [ ] Store Device Information
+- [ ] Store IP Address
+- [ ] Store User Agent
+- [ ] Track Last Activity
+- [ ] Support Multiple Devices
+
+---
+
+## Epic 5: Security
+
+- [ ] Rate Limiting
+- [ ] Global Validation Pipe
+- [ ] Exception Filter
+- [ ] Password Strength Validation
+- [ ] Security Headers (Helmet)
+- [ ] CORS Configuration
+- [ ] Environment Validation
+
+---
+
+## Epic 6: Documentation
+
+- [ ] Swagger
+- [ ] API Examples
+- [ ] Error Responses
+- [ ] Environment Variables Documentation
+
+---
+
+## Epic 7: Testing
+
+### Unit Tests
+
+- [ ] Register
+- [ ] Login
+- [ ] Verify Email
+- [ ] Refresh Token
+- [ ] Forgot Password
+- [ ] Reset Password
+
+### Integration Tests
+
+- [ ] Auth Flow
+- [ ] Session Flow
+- [ ] Password Reset Flow
+
+---
+
+## Definition of Done (per feature)
+
+- [ ] ✅ Build passes
+- [ ] ✅ Lint passes
+- [ ] ✅ Tests pass
+- [ ] ✅ Swagger updated
+- [ ] ✅ Prisma migration applied (if schema changed)
+- [ ] ✅ No hardcoded secrets
+- [ ] ✅ Environment variables validated
+- [ ] ✅ Code reviewed

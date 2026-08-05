@@ -1,0 +1,42 @@
+name: quickbite-auth
+
+# Auth Service container.
+# Requires the shared infrastructure to be running first (Postgres/RabbitMQ/Redis),
+# because it attaches to that stack's external network `quickbite-net`.
+#
+#   1) docker compose -f infra/docker/docker-compose.yml up -d
+#   2) docker compose -f services/auth-service/docker-compose.yml up -d --build
+#
+# Cross-compose note: depends_on cannot reach the Postgres in the other project,
+# so bring infra up first. The DB schema is applied separately via
+# `npm run db:migrate` (dev) or `prisma migrate deploy` (prod).
+
+services:
+  auth-service:
+    build:
+      # Monorepo root — deps are hoisted there and the lockfile lives there.
+      context: ../..
+      dockerfile: services/auth-service/Dockerfile
+    image: quickbite/auth-service:latest
+    container_name: quickbite-auth-service
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      # Inside Docker the DB host is the Postgres *service name*, not localhost.
+      DATABASE_URL: postgresql://quickbite:quickbite_dev_pw@postgres:5432/auth_db?schema=public
+    ports:
+      - "3001:3001"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - quickbite-net
+
+networks:
+  # Provided by infra/docker/docker-compose.yml — must exist before this runs.
+  quickbite-net:
+    external: true

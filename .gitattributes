@@ -1,0 +1,17 @@
+# Normalize text files to LF in the repo
+* text=auto eol=lf
+
+# Shell scripts must stay LF (run inside Linux containers)
+*.sh text eol=lf
+
+# Git hooks are bash scripts — keep LF even on Windows
+.githooks/* text eol=lf
+
+# Windows-specific scripts keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.ico binary

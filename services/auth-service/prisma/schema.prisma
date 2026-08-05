@@ -1,0 +1,78 @@
+// Auth Service database schema.
+// Owns auth_db only — never reads another service's database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// A platform identity. One row per person who can authenticate.
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  firstName       String     @map("first_name") @db.VarChar(100)
+  lastName        String     @map("last_name") @db.VarChar(100)
+  email           String     @unique @db.VarChar(255)
+  passwordHash    String     @map("password_hash") @db.VarChar(255)
+  role            UserRole
+  status          UserStatus @default(PENDING)
+  isEmailVerified Boolean    @default(false) @map("is_email_verified")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // 1 User ── N Sessions
+  sessions Session[]
+
+  @@index([role])
+  @@index([status])
+  @@index([createdAt])
+  @@map("users")
+}
+
+/// A single authenticated login (one refresh token / device).
+/// Enables multi-device sessions, revocation, and refresh rotation.
+model Session {
+  id               String @id @default(uuid()) @db.Uuid
+  userId           String @map("user_id") @db.Uuid
+  refreshTokenHash String @map("refresh_token_hash") @db.VarChar(255)
+
+  // Device / network metadata — optional (headers may be absent). See note in review.
+  deviceName String? @map("device_name") @db.VarChar(255)
+  deviceType String? @map("device_type") @db.VarChar(50)
+  ipAddress  String? @map("ip_address") @db.VarChar(50)
+  userAgent  String? @map("user_agent") @db.Text
+
+  expiresAt  DateTime  @map("expires_at")
+  lastUsedAt DateTime  @default(now()) @map("last_used_at")
+  revokedAt  DateTime? @map("revoked_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([revokedAt])
+  @@map("sessions")
+}
+
+enum UserRole {
+  CUSTOMER
+  RESTAURANT_OWNER
+  ADMIN
+
+  @@map("user_role")
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  BLOCKED
+
+  @@map("user_status")
+}
