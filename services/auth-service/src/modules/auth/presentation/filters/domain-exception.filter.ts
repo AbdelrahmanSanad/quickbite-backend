@@ -6,8 +6,11 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
+  AccountNotActiveError,
   DomainError,
   EmailAlreadyInUseError,
+  EmailNotVerifiedError,
+  InvalidCredentialsError,
 } from '../../domain/errors/domain.error';
 
 /**
@@ -29,6 +32,15 @@ export class DomainExceptionFilter implements ExceptionFilter {
   private statusFor(exception: DomainError): number {
     if (exception instanceof EmailAlreadyInUseError) {
       return HttpStatus.CONFLICT;
+    }
+    if (exception instanceof InvalidCredentialsError) {
+      return HttpStatus.UNAUTHORIZED;
+    }
+    if (
+      exception instanceof EmailNotVerifiedError ||
+      exception instanceof AccountNotActiveError
+    ) {
+      return HttpStatus.FORBIDDEN;
     }
     return HttpStatus.BAD_REQUEST;
   }
