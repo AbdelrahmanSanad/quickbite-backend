@@ -35,7 +35,8 @@ Wait for confirmation on non-trivial features (multi-layer or new public endpoin
 
 ### 3. Branch
 1. Ensure the working tree is clean (`git status`). If dirty, stop and report.
-2. Determine the base branch (`main` if it exists, else `master`) and update it.
+2. Determine the base branch: `development` if it exists, else `main`, else
+   `master`. Check it out and pull the latest.
 3. Create and switch to a feature branch:
    `feat/auth-<featureId>-<kebab-title>`  e.g. `feat/auth-2.1-login`.
    For epic-level task groups (Epics 4–7) use `feat/auth-<epicNumber>-<kebab-title>`.
@@ -88,8 +89,9 @@ End the commit message body with:
    locally and that a remote/`gh` must be set up to push (see the repo README/notes).
 2. Otherwise push the branch. The **pre-push hook** re-runs the quality gate and blocks
    on failure — do not use `--no-verify`.
-3. Open a PR with `gh pr create` titled `feat(auth): <title> [<branch>]`, body listing
-   the completed tasks and DoD. **Never merge** — leave it for review.
+3. Open a PR with `gh pr create --base development` titled
+   `feat(auth): <title> [<branch>]`, body listing the completed tasks and DoD.
+   **Never merge** — leave it for review.
 
 ## Guardrails
 - One feature per invocation. Don't batch multiple features into one branch/PR.
