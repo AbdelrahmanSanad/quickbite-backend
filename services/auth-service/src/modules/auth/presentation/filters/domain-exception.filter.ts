@@ -8,6 +8,8 @@ import { Response } from 'express';
 import {
   DomainError,
   EmailAlreadyInUseError,
+  InvalidVerificationTokenError,
+  TooManyVerificationAttemptsError,
 } from '../../domain/errors/domain.error';
 
 /**
@@ -29,6 +31,12 @@ export class DomainExceptionFilter implements ExceptionFilter {
   private statusFor(exception: DomainError): number {
     if (exception instanceof EmailAlreadyInUseError) {
       return HttpStatus.CONFLICT;
+    }
+    if (exception instanceof TooManyVerificationAttemptsError) {
+      return HttpStatus.TOO_MANY_REQUESTS;
+    }
+    if (exception instanceof InvalidVerificationTokenError) {
+      return HttpStatus.BAD_REQUEST;
     }
     return HttpStatus.BAD_REQUEST;
   }
