@@ -12,6 +12,7 @@ export interface CreateUserData {
 export interface UserRepository {
   existsByEmail(email: string): Promise<boolean>;
   create(data: CreateUserData): Promise<User>;
+  findByEmail(email: string): Promise<User | null>;
   findById(userId: string): Promise<User | null>;
   /** Set status = ACTIVE and isEmailVerified = true. */
   markEmailVerified(userId: string): Promise<void>;

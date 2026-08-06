@@ -43,17 +43,17 @@ authentication.
 
 ## Epic 2: Authentication
 
-### Feature 2.1 — Login
+### Feature 2.1 — Login ✅
 
-- [ ] Validate Credentials
-- [ ] Check User Status
-- [ ] Check Email Verified
-- [ ] Verify Password
-- [ ] Generate Access Token
-- [ ] Generate Refresh Token
-- [ ] Hash Refresh Token
-- [ ] Save Session
-- [ ] Return Tokens
+- [x] Validate Credentials
+- [x] Check User Status
+- [x] Check Email Verified
+- [x] Verify Password
+- [x] Generate Access Token
+- [x] Generate Refresh Token
+- [x] Hash Refresh Token
+- [x] Save Session
+- [x] Return Tokens
 
 ### Feature 2.2 — Refresh Token
 

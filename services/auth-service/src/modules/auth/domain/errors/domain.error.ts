@@ -30,3 +30,24 @@ export class TooManyVerificationAttemptsError extends DomainError {
     super('Too many verification attempts; request a new token');
   }
 }
+
+/** Wrong email or password (kept generic to avoid user enumeration). */
+export class InvalidCredentialsError extends DomainError {
+  constructor() {
+    super('Invalid email or password');
+  }
+}
+
+/** The account exists and password is correct, but email isn't verified. */
+export class EmailNotVerifiedError extends DomainError {
+  constructor() {
+    super('Email is not verified');
+  }
+}
+
+/** The account is suspended or blocked. */
+export class AccountNotActiveError extends DomainError {
+  constructor() {
+    super('Account is not active');
+  }
+}

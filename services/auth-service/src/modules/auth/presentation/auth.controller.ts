@@ -1,6 +1,16 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Headers,
+  HttpCode,
+  HttpStatus,
+  Ip,
+  Post,
+} from '@nestjs/common';
+import { LoginUseCase } from '../application/login.use-case';
 import { RegisterUserUseCase } from '../application/register-user.use-case';
 import { VerifyEmailUseCase } from '../application/verify-email.use-case';
+import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
@@ -9,6 +19,7 @@ export class AuthController {
   constructor(
     private readonly registerUser: RegisterUserUseCase,
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
+    private readonly loginUseCase: LoginUseCase,
   ) {}
 
   @Post('register')
@@ -31,5 +42,22 @@ export class AuthController {
       verified: true,
       message: 'Email verified successfully. Your account is now active.',
     };
+  }
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(
+    @Body() dto: LoginDto,
+    @Ip() ip: string,
+    @Headers('user-agent') userAgent?: string,
+  ) {
+    return this.loginUseCase.execute({
+      email: dto.email,
+      password: dto.password,
+      deviceName: dto.deviceName ?? null,
+      deviceType: dto.deviceType ?? null,
+      ipAddress: ip ?? null,
+      userAgent: userAgent ?? null,
+    });
   }
 }
