@@ -31,13 +31,13 @@ authentication.
 - [x] Publish `UserRegistered` Event
 - [x] Return Success Response
 
-### Feature 1.2 — Verify Email
+### Feature 1.2 — Verify Email ✅
 
-- [ ] Verify Token from Redis
-- [ ] Activate User
-- [ ] Mark Email as Verified
-- [ ] Delete Verification Token
-- [ ] Return Success Response
+- [x] Verify Token from Redis
+- [x] Activate User
+- [x] Mark Email as Verified
+- [x] Delete Verification Token
+- [x] Return Success Response
 
 ---
 

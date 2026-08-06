@@ -5,7 +5,7 @@ import {
   CreateUserData,
   UserRepository,
 } from '../../domain/ports/user-repository.port';
-import { User } from '../../domain/user';
+import { User, UserStatus } from '../../domain/user';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -31,6 +31,18 @@ export class PrismaUserRepository implements UserRepository {
       },
     });
     return this.toDomain(created);
+  }
+
+  async findById(userId: string): Promise<User | null> {
+    const found = await this.prisma.user.findUnique({ where: { id: userId } });
+    return found ? this.toDomain(found) : null;
+  }
+
+  async markEmailVerified(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { status: UserStatus.ACTIVE, isEmailVerified: true },
+    });
   }
 
   private toDomain(u: PrismaUser): User {

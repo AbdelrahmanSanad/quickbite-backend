@@ -6,6 +6,7 @@ import {
   REDIS_CLIENT,
 } from '../../infrastructure/redis/redis.tokens';
 import { RegisterUserUseCase } from './application/register-user.use-case';
+import { VerifyEmailUseCase } from './application/verify-email.use-case';
 import { EVENT_PUBLISHER } from './domain/ports/event-publisher.port';
 import { PASSWORD_HASHER } from './domain/ports/password-hasher.port';
 import { TOKEN_GENERATOR } from './domain/ports/token-generator.port';
@@ -28,6 +29,7 @@ const TEN_MINUTES_SECONDS = 60 * 10;
   controllers: [AuthController],
   providers: [
     RegisterUserUseCase,
+    VerifyEmailUseCase,
 
     // Port -> adapter bindings
     { provide: USER_REPOSITORY, useClass: PrismaUserRepository },

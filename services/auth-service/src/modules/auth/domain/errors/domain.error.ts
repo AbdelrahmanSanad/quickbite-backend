@@ -16,3 +16,17 @@ export class EmailAlreadyInUseError extends DomainError {
     super('Email is already registered');
   }
 }
+
+/** The verification token is wrong, already used, or expired. */
+export class InvalidVerificationTokenError extends DomainError {
+  constructor() {
+    super('Invalid or expired verification token');
+  }
+}
+
+/** Too many failed verification attempts for this token. */
+export class TooManyVerificationAttemptsError extends DomainError {
+  constructor() {
+    super('Too many verification attempts; request a new token');
+  }
+}
