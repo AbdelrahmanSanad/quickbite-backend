@@ -8,9 +8,11 @@ import {
   Post,
 } from '@nestjs/common';
 import { LoginUseCase } from '../application/login.use-case';
+import { RefreshTokenUseCase } from '../application/refresh-token.use-case';
 import { RegisterUserUseCase } from '../application/register-user.use-case';
 import { VerifyEmailUseCase } from '../application/verify-email.use-case';
 import { LoginDto } from './dto/login.dto';
+import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
@@ -20,6 +22,7 @@ export class AuthController {
     private readonly registerUser: RegisterUserUseCase,
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
     private readonly loginUseCase: LoginUseCase,
+    private readonly refreshTokenUseCase: RefreshTokenUseCase,
   ) {}
 
   @Post('register')
@@ -59,5 +62,11 @@ export class AuthController {
       ipAddress: ip ?? null,
       userAgent: userAgent ?? null,
     });
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(@Body() dto: RefreshDto) {
+    return this.refreshTokenUseCase.execute(dto);
   }
 }

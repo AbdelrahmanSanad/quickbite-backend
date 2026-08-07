@@ -39,7 +39,7 @@ model User {
 model Session {
   id               String @id @default(uuid()) @db.Uuid
   userId           String @map("user_id") @db.Uuid
-  refreshTokenHash String @map("refresh_token_hash") @db.VarChar(255)
+  refreshTokenHash String @unique @map("refresh_token_hash") @db.VarChar(255)
 
   // Device / network metadata — optional (headers may be absent). See note in review.
   deviceName String? @map("device_name") @db.VarChar(255)

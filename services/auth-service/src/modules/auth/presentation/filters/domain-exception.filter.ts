@@ -11,6 +11,7 @@ import {
   EmailAlreadyInUseError,
   EmailNotVerifiedError,
   InvalidCredentialsError,
+  InvalidRefreshTokenError,
   InvalidVerificationTokenError,
   TooManyVerificationAttemptsError,
 } from '../../domain/errors/domain.error';
@@ -35,7 +36,10 @@ export class DomainExceptionFilter implements ExceptionFilter {
     if (exception instanceof EmailAlreadyInUseError) {
       return HttpStatus.CONFLICT;
     }
-    if (exception instanceof InvalidCredentialsError) {
+    if (
+      exception instanceof InvalidCredentialsError ||
+      exception instanceof InvalidRefreshTokenError
+    ) {
       return HttpStatus.UNAUTHORIZED;
     }
     if (

@@ -51,3 +51,10 @@ export class AccountNotActiveError extends DomainError {
     super('Account is not active');
   }
 }
+
+/** The refresh token is unknown, revoked, or expired. */
+export class InvalidRefreshTokenError extends DomainError {
+  constructor() {
+    super('Invalid or expired refresh token');
+  }
+}
