@@ -63,11 +63,11 @@ authentication.
 - [x] Update Session
 - [x] Return New Tokens
 
-### Feature 2.3 — Logout
+### Feature 2.3 — Logout ✅
 
-- [ ] Revoke Current Session
-- [ ] Remove Refresh Token
-- [ ] Return Success
+- [x] Revoke Current Session
+- [x] Remove Refresh Token
+- [x] Return Success
 
 ### Feature 2.4 — Logout All Devices
 

@@ -46,6 +46,14 @@ export class PrismaSessionRepository implements SessionRepository {
     });
   }
 
+  async revoke(sessionId: string): Promise<void> {
+    // Only stamp active sessions so an original revoke time is preserved.
+    await this.prisma.session.updateMany({
+      where: { id: sessionId, revokedAt: null },
+      data: { revokedAt: new Date() },
+    });
+  }
+
   private toDomain(s: PrismaSession): Session {
     return {
       id: s.id,

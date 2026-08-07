@@ -7,6 +7,7 @@ import {
   REDIS_CLIENT,
 } from '../../infrastructure/redis/redis.tokens';
 import { LoginUseCase } from './application/login.use-case';
+import { LogoutUseCase } from './application/logout.use-case';
 import { RefreshTokenUseCase } from './application/refresh-token.use-case';
 import { RegisterUserUseCase } from './application/register-user.use-case';
 import { VerifyEmailUseCase } from './application/verify-email.use-case';
@@ -42,6 +43,7 @@ const TEN_MINUTES_SECONDS = 60 * 10;
     VerifyEmailUseCase,
     LoginUseCase,
     RefreshTokenUseCase,
+    LogoutUseCase,
 
     // Port -> adapter bindings
     { provide: USER_REPOSITORY, useClass: PrismaUserRepository },

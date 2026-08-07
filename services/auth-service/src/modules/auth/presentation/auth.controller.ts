@@ -8,10 +8,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { LoginUseCase } from '../application/login.use-case';
+import { LogoutUseCase } from '../application/logout.use-case';
 import { RefreshTokenUseCase } from '../application/refresh-token.use-case';
 import { RegisterUserUseCase } from '../application/register-user.use-case';
 import { VerifyEmailUseCase } from '../application/verify-email.use-case';
 import { LoginDto } from './dto/login.dto';
+import { LogoutDto } from './dto/logout.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
@@ -23,6 +25,7 @@ export class AuthController {
     private readonly verifyEmailUseCase: VerifyEmailUseCase,
     private readonly loginUseCase: LoginUseCase,
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
+    private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
   @Post('register')
@@ -68,5 +71,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async refresh(@Body() dto: RefreshDto) {
     return this.refreshTokenUseCase.execute(dto);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Body() dto: LogoutDto) {
+    await this.logoutUseCase.execute(dto);
+    return { success: true, message: 'Logged out.' };
   }
 }
