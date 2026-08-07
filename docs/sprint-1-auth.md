@@ -69,10 +69,10 @@ authentication.
 - [x] Remove Refresh Token
 - [x] Return Success
 
-### Feature 2.4 — Logout All Devices
+### Feature 2.4 — Logout All Devices ✅
 
-- [ ] Revoke All Sessions
-- [ ] Return Success
+- [x] Revoke All Sessions
+- [x] Return Success
 
 ---
 

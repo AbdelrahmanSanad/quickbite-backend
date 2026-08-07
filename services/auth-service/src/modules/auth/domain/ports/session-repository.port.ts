@@ -22,6 +22,8 @@ export interface SessionRepository {
   ): Promise<void>;
   /** Soft-revoke a single active session (sets revoked_at). Idempotent. */
   revoke(sessionId: string): Promise<void>;
+  /** Soft-revoke all of a user's active sessions; returns how many. */
+  revokeAllByUserId(userId: string): Promise<number>;
 }
 
 export const SESSION_REPOSITORY = Symbol('SESSION_REPOSITORY');

@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { LoginUseCase } from '../application/login.use-case';
+import { LogoutAllUseCase } from '../application/logout-all.use-case';
 import { LogoutUseCase } from '../application/logout.use-case';
 import { RefreshTokenUseCase } from '../application/refresh-token.use-case';
 import { RegisterUserUseCase } from '../application/register-user.use-case';
@@ -26,6 +27,7 @@ export class AuthController {
     private readonly loginUseCase: LoginUseCase,
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
     private readonly logoutUseCase: LogoutUseCase,
+    private readonly logoutAllUseCase: LogoutAllUseCase,
   ) {}
 
   @Post('register')
@@ -78,5 +80,16 @@ export class AuthController {
   async logout(@Body() dto: LogoutDto) {
     await this.logoutUseCase.execute(dto);
     return { success: true, message: 'Logged out.' };
+  }
+
+  @Post('logout-all')
+  @HttpCode(HttpStatus.OK)
+  async logoutAll(@Body() dto: LogoutDto) {
+    const { revokedCount } = await this.logoutAllUseCase.execute(dto);
+    return {
+      success: true,
+      revokedCount,
+      message: 'Logged out of all devices.',
+    };
   }
 }
