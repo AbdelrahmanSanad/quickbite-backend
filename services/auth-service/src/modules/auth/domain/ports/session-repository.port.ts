@@ -20,6 +20,8 @@ export interface SessionRepository {
     refreshTokenHash: string,
     expiresAt: Date,
   ): Promise<void>;
+  /** Soft-revoke a single active session (sets revoked_at). Idempotent. */
+  revoke(sessionId: string): Promise<void>;
 }
 
 export const SESSION_REPOSITORY = Symbol('SESSION_REPOSITORY');
