@@ -13,6 +13,13 @@ export interface CreateSessionData {
 /** Persistence boundary for sessions. */
 export interface SessionRepository {
   create(data: CreateSessionData): Promise<Session>;
+  findByRefreshTokenHash(refreshTokenHash: string): Promise<Session | null>;
+  /** Replace the refresh token hash and slide expiry; bumps last_used_at. */
+  rotate(
+    sessionId: string,
+    refreshTokenHash: string,
+    expiresAt: Date,
+  ): Promise<void>;
 }
 
 export const SESSION_REPOSITORY = Symbol('SESSION_REPOSITORY');

@@ -55,13 +55,13 @@ authentication.
 - [x] Save Session
 - [x] Return Tokens
 
-### Feature 2.2 — Refresh Token
+### Feature 2.2 — Refresh Token ✅
 
-- [ ] Validate Refresh Token
-- [ ] Verify Stored Hash
-- [ ] Rotate Refresh Token
-- [ ] Update Session
-- [ ] Return New Tokens
+- [x] Validate Refresh Token
+- [x] Verify Stored Hash
+- [x] Rotate Refresh Token
+- [x] Update Session
+- [x] Return New Tokens
 
 ### Feature 2.3 — Logout
 

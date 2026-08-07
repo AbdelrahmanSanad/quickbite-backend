@@ -26,6 +26,26 @@ export class PrismaSessionRepository implements SessionRepository {
     return this.toDomain(created);
   }
 
+  async findByRefreshTokenHash(
+    refreshTokenHash: string,
+  ): Promise<Session | null> {
+    const found = await this.prisma.session.findUnique({
+      where: { refreshTokenHash },
+    });
+    return found ? this.toDomain(found) : null;
+  }
+
+  async rotate(
+    sessionId: string,
+    refreshTokenHash: string,
+    expiresAt: Date,
+  ): Promise<void> {
+    await this.prisma.session.update({
+      where: { id: sessionId },
+      data: { refreshTokenHash, expiresAt, lastUsedAt: new Date() },
+    });
+  }
+
   private toDomain(s: PrismaSession): Session {
     return {
       id: s.id,
