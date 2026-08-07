@@ -1,0 +1,52 @@
+name: CI
+
+# Runs the quality gate on every PR into a long-lived branch, and on pushes
+# to development. Mirrors the local pre-push hook (lint · build/type-check · test)
+# so nothing reaches development without passing.
+on:
+  pull_request:
+    branches: [development, main, master]
+  push:
+    branches: [development]
+
+# Cancel superseded runs for the same ref (e.g. new push to an open PR).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  TURBO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # CI starts clean, so the Prisma client must be generated before the
+      # TypeScript build can type-check the code that imports it.
+      - name: Generate Prisma client
+        run: npm run db:generate -w @quickbite/auth-service
+
+      - name: Lint
+        run: npx turbo run lint
+
+      - name: Build & type-check
+        run: npx turbo run build
+
+      - name: Test
+        run: npx turbo run test
