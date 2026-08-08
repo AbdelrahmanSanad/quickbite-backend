@@ -110,15 +110,15 @@ authentication.
 
 ---
 
-## Epic 5: Security
+## Epic 5: Security ✅
 
-- [ ] Rate Limiting
-- [ ] Global Validation Pipe
-- [ ] Exception Filter
-- [ ] Password Strength Validation
-- [ ] Security Headers (Helmet)
-- [ ] CORS Configuration
-- [ ] Environment Validation
+- [x] Rate Limiting — `@nestjs/throttler` (Redis-backed), global + tighter on auth routes
+- [x] Global Validation Pipe — `ValidationPipe` (whitelist, forbidNonWhitelisted, transform)
+- [x] Exception Filter — `DomainExceptionFilter`
+- [x] Password Strength Validation — `@IsStrongPassword` on register + reset
+- [x] Security Headers (Helmet) — `helmet()` middleware
+- [x] CORS Configuration — `enableCors` from `CORS_ORIGINS`
+- [x] Environment Validation — Joi schema in `ConfigModule` (fails fast at boot)
 
 ---
 

@@ -7,6 +7,7 @@ import {
   Ip,
   Post,
 } from '@nestjs/common';
+import { seconds, Throttle } from '@nestjs/throttler';
 import { ForgotPasswordUseCase } from '../application/forgot-password.use-case';
 import { LoginUseCase } from '../application/login.use-case';
 import { ResetPasswordUseCase } from '../application/reset-password.use-case';
@@ -23,6 +24,8 @@ import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
+// Auth endpoints are sensitive — tighter than the global default (10 req/min/IP).
+@Throttle({ default: { limit: 10, ttl: seconds(60) } })
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -99,6 +102,8 @@ export class AuthController {
     };
   }
 
+  // Stricter: OTP issuance is abuse-prone (email spam / enumeration probing).
+  @Throttle({ default: { limit: 5, ttl: seconds(60) } })
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   async forgotPassword(@Body() dto: ForgotPasswordDto) {

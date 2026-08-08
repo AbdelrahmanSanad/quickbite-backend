@@ -1,4 +1,10 @@
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsStrongPassword,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class RegisterDto {
   @IsString()
@@ -15,9 +21,14 @@ export class RegisterDto {
   @MaxLength(255)
   email!: string;
 
-  // Basic length guard; full strength rules land in Epic 5.
   @IsString()
-  @MinLength(8)
   @MaxLength(128)
+  @IsStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
   password!: string;
 }
