@@ -97,14 +97,16 @@ authentication.
 
 ---
 
-## Epic 4: Session Management
+## Epic 4: Session Management ✅
 
-- [ ] Create Session Entity
-- [ ] Store Device Information
-- [ ] Store IP Address
-- [ ] Store User Agent
-- [ ] Track Last Activity
-- [ ] Support Multiple Devices
+> Satisfied by Login (2.1) and Refresh (2.2) — no additional code required.
+
+- [x] Create Session Entity — `Session` Prisma model + domain `Session` type
+- [x] Store Device Information — `device_name` / `device_type`, captured at login
+- [x] Store IP Address — `ip_address`, captured via `@Ip()`
+- [x] Store User Agent — `user_agent`, captured via `@Headers('user-agent')`
+- [x] Track Last Activity — `last_used_at`, set at login and updated on refresh/rotate
+- [x] Support Multiple Devices — one session row per login (independent refresh tokens)
 
 ---
 
