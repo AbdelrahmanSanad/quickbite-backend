@@ -78,13 +78,13 @@ authentication.
 
 ## Epic 3: Password Recovery
 
-### Feature 3.1 — Forgot Password
+### Feature 3.1 — Forgot Password ✅
 
-- [ ] Validate Email
-- [ ] Generate OTP
-- [ ] Store OTP in Redis (TTL 10 min)
-- [ ] Publish `PasswordResetRequested` Event
-- [ ] Return Success
+- [x] Validate Email
+- [x] Generate OTP
+- [x] Store OTP in Redis (TTL 10 min)
+- [x] Publish `PasswordResetRequested` Event
+- [x] Return Success
 
 ### Feature 3.2 — Reset Password
 

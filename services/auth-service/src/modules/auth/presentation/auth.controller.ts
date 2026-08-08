@@ -7,12 +7,14 @@ import {
   Ip,
   Post,
 } from '@nestjs/common';
+import { ForgotPasswordUseCase } from '../application/forgot-password.use-case';
 import { LoginUseCase } from '../application/login.use-case';
 import { LogoutAllUseCase } from '../application/logout-all.use-case';
 import { LogoutUseCase } from '../application/logout.use-case';
 import { RefreshTokenUseCase } from '../application/refresh-token.use-case';
 import { RegisterUserUseCase } from '../application/register-user.use-case';
 import { VerifyEmailUseCase } from '../application/verify-email.use-case';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { LogoutDto } from './dto/logout.dto';
 import { RefreshDto } from './dto/refresh.dto';
@@ -28,6 +30,7 @@ export class AuthController {
     private readonly refreshTokenUseCase: RefreshTokenUseCase,
     private readonly logoutUseCase: LogoutUseCase,
     private readonly logoutAllUseCase: LogoutAllUseCase,
+    private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
   ) {}
 
   @Post('register')
@@ -90,6 +93,18 @@ export class AuthController {
       success: true,
       revokedCount,
       message: 'Logged out of all devices.',
+    };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    await this.forgotPasswordUseCase.execute(dto);
+    // Same response whether or not the email exists (no enumeration).
+    return {
+      success: true,
+      message:
+        'If an account exists for that email, a reset code has been sent.',
     };
   }
 }
