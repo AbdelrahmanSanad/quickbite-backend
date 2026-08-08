@@ -58,3 +58,17 @@ export class InvalidRefreshTokenError extends DomainError {
     super('Invalid or expired refresh token');
   }
 }
+
+/** The password-reset OTP is wrong, already used, or expired. */
+export class InvalidResetCodeError extends DomainError {
+  constructor() {
+    super('Invalid or expired reset code');
+  }
+}
+
+/** Too many failed password-reset attempts for this code. */
+export class TooManyResetAttemptsError extends DomainError {
+  constructor() {
+    super('Too many reset attempts; request a new code');
+  }
+}

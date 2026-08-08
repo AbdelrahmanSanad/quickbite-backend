@@ -50,6 +50,13 @@ export class PrismaUserRepository implements UserRepository {
     });
   }
 
+  async updatePassword(userId: string, passwordHash: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { passwordHash },
+    });
+  }
+
   private toDomain(u: PrismaUser): User {
     return {
       id: u.id,

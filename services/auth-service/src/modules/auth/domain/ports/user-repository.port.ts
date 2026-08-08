@@ -16,6 +16,8 @@ export interface UserRepository {
   findById(userId: string): Promise<User | null>;
   /** Set status = ACTIVE and isEmailVerified = true. */
   markEmailVerified(userId: string): Promise<void>;
+  /** Replace the stored password hash. */
+  updatePassword(userId: string, passwordHash: string): Promise<void>;
 }
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');

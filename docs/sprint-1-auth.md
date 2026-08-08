@@ -86,14 +86,14 @@ authentication.
 - [x] Publish `PasswordResetRequested` Event
 - [x] Return Success
 
-### Feature 3.2 — Reset Password
+### Feature 3.2 — Reset Password ✅
 
-- [ ] Validate OTP
-- [ ] Hash New Password
-- [ ] Update Password
-- [ ] Revoke All Sessions
-- [ ] Delete OTP
-- [ ] Return Success
+- [x] Validate OTP
+- [x] Hash New Password
+- [x] Update Password
+- [x] Revoke All Sessions
+- [x] Delete OTP
+- [x] Return Success
 
 ---
 
