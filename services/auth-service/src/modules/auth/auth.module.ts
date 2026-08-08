@@ -12,6 +12,7 @@ import { LogoutAllUseCase } from './application/logout-all.use-case';
 import { LogoutUseCase } from './application/logout.use-case';
 import { RefreshTokenUseCase } from './application/refresh-token.use-case';
 import { RegisterUserUseCase } from './application/register-user.use-case';
+import { ResetPasswordUseCase } from './application/reset-password.use-case';
 import { VerifyEmailUseCase } from './application/verify-email.use-case';
 import { ACCESS_TOKEN_SERVICE } from './domain/ports/access-token.service.port';
 import { EVENT_PUBLISHER } from './domain/ports/event-publisher.port';
@@ -50,6 +51,7 @@ const TEN_MINUTES_SECONDS = 60 * 10;
     LogoutUseCase,
     LogoutAllUseCase,
     ForgotPasswordUseCase,
+    ResetPasswordUseCase,
 
     // Port -> adapter bindings
     { provide: USER_REPOSITORY, useClass: PrismaUserRepository },

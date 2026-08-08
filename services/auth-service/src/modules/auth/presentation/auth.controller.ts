@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ForgotPasswordUseCase } from '../application/forgot-password.use-case';
 import { LoginUseCase } from '../application/login.use-case';
+import { ResetPasswordUseCase } from '../application/reset-password.use-case';
 import { LogoutAllUseCase } from '../application/logout-all.use-case';
 import { LogoutUseCase } from '../application/logout.use-case';
 import { RefreshTokenUseCase } from '../application/refresh-token.use-case';
@@ -19,6 +20,7 @@ import { LoginDto } from './dto/login.dto';
 import { LogoutDto } from './dto/logout.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller('auth')
@@ -31,6 +33,7 @@ export class AuthController {
     private readonly logoutUseCase: LogoutUseCase,
     private readonly logoutAllUseCase: LogoutAllUseCase,
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
   ) {}
 
   @Post('register')
@@ -105,6 +108,16 @@ export class AuthController {
       success: true,
       message:
         'If an account exists for that email, a reset code has been sent.',
+    };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.resetPasswordUseCase.execute(dto);
+    return {
+      success: true,
+      message: 'Password has been reset. Please log in again.',
     };
   }
 }

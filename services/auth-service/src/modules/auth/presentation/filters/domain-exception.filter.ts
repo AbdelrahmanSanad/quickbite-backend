@@ -12,7 +12,9 @@ import {
   EmailNotVerifiedError,
   InvalidCredentialsError,
   InvalidRefreshTokenError,
+  InvalidResetCodeError,
   InvalidVerificationTokenError,
+  TooManyResetAttemptsError,
   TooManyVerificationAttemptsError,
 } from '../../domain/errors/domain.error';
 
@@ -48,10 +50,16 @@ export class DomainExceptionFilter implements ExceptionFilter {
     ) {
       return HttpStatus.FORBIDDEN;
     }
-    if (exception instanceof TooManyVerificationAttemptsError) {
+    if (
+      exception instanceof TooManyVerificationAttemptsError ||
+      exception instanceof TooManyResetAttemptsError
+    ) {
       return HttpStatus.TOO_MANY_REQUESTS;
     }
-    if (exception instanceof InvalidVerificationTokenError) {
+    if (
+      exception instanceof InvalidVerificationTokenError ||
+      exception instanceof InvalidResetCodeError
+    ) {
       return HttpStatus.BAD_REQUEST;
     }
     return HttpStatus.BAD_REQUEST;
