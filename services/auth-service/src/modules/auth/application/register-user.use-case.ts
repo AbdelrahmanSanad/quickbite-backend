@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EMAIL_VERIFICATION_STORE } from '../../../infrastructure/redis/redis.tokens';
+import { EMAIL_VERIFICATION_STORE } from '../domain/ports/email-verification-store.port';
 import { EmailAlreadyInUseError } from '../domain/errors/domain.error';
 import { UserRegisteredEvent } from '../domain/events/user-registered.event';
 import { EVENT_PUBLISHER } from '../domain/ports/event-publisher.port';

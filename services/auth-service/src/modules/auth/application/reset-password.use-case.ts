@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PASSWORD_RESET_STORE } from '../../../infrastructure/redis/redis.tokens';
+import { PASSWORD_RESET_STORE } from '../domain/ports/password-reset-store.port';
 import {
   InvalidResetCodeError,
   TooManyResetAttemptsError,
