@@ -1,9 +1,9 @@
 import {
   IsEmail,
+  IsStrongPassword,
   IsString,
   Matches,
   MaxLength,
-  MinLength,
 } from 'class-validator';
 
 export class ResetPasswordDto {
@@ -16,7 +16,13 @@ export class ResetPasswordDto {
   otp!: string;
 
   @IsString()
-  @MinLength(8)
   @MaxLength(128)
+  @IsStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
   newPassword!: string;
 }
