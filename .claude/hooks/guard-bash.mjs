@@ -30,7 +30,21 @@ try {
 
 if (!command.trim()) process.exit(0);
 
-const c = command.replace(/\s+/g, ' ').trim();
+/**
+ * Remove quoted/heredoc *content* before matching, so a command that only
+ * mentions a dangerous pattern inside a commit/PR message or string literal
+ * (e.g. `gh pr create --body "...rm -rf..."`) isn't mistaken for running it.
+ * The command verb + flags live outside quotes, so real dangers still match
+ * (e.g. `rm -rf "$dir"` -> `rm -rf ""`).
+ */
+function sanitize(s) {
+  return s
+    .replace(/<<-?\s*(['"]?)([A-Za-z_]\w*)\1[\s\S]*?^\s*\2\b/gm, ' <<HEREDOC ')
+    .replace(/'[^']*'/g, " '' ")
+    .replace(/"[^"]*"/g, ' "" ');
+}
+
+const c = sanitize(command).replace(/\s+/g, ' ').trim();
 
 // rm with BOTH recursive and force (rm -rf, -fr, -Rf, --recursive --force).
 function isRmRecursiveForce(s) {
