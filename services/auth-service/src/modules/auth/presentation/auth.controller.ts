@@ -1,13 +1,20 @@
 import {
   Body,
   Controller,
+  Get,
   Headers,
   HttpCode,
   HttpStatus,
   Ip,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { seconds, Throttle } from '@nestjs/throttler';
 import { ForgotPasswordUseCase } from '../application/forgot-password.use-case';
 import { LoginUseCase } from '../application/login.use-case';
@@ -24,6 +31,9 @@ import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import type { AuthenticatedUser } from './security/authenticated-user';
 
 // Auth endpoints are sensitive — tighter than the global default (10 req/min/IP).
 @ApiTags('auth')
@@ -189,5 +199,20 @@ export class AuthController {
       success: true,
       message: 'Password has been reset. Please log in again.',
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Return the authenticated user (requires a Bearer access token)',
+  })
+  @ApiResponse({ status: 200, description: 'The authenticated identity.' })
+  @ApiResponse({
+    status: 401,
+    description: 'Missing, malformed, invalid, or expired access token.',
+  })
+  getCurrentUser(@CurrentUser() user: AuthenticatedUser): AuthenticatedUser {
+    return user;
   }
 }

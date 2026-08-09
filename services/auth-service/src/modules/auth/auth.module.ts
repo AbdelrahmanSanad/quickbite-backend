@@ -32,6 +32,7 @@ import { CryptoTokenGenerator } from './infrastructure/security/crypto-token-gen
 import { JwtAccessTokenService } from './infrastructure/security/jwt-access-token.service';
 import { Sha256RefreshTokenService } from './infrastructure/security/sha256-refresh-token.service';
 import { AuthController } from './presentation/auth.controller';
+import { JwtAuthGuard } from './presentation/guards/jwt-auth.guard';
 
 const ONE_DAY_SECONDS = 60 * 60 * 24;
 const TEN_MINUTES_SECONDS = 60 * 10;
@@ -52,6 +53,7 @@ const TEN_MINUTES_SECONDS = 60 * 10;
     LogoutAllUseCase,
     ForgotPasswordUseCase,
     ResetPasswordUseCase,
+    JwtAuthGuard,
 
     // Port -> adapter bindings
     { provide: USER_REPOSITORY, useClass: PrismaUserRepository },
@@ -86,6 +88,6 @@ const TEN_MINUTES_SECONDS = 60 * 10;
         }),
     },
   ],
-  exports: [EMAIL_VERIFICATION_STORE, PASSWORD_RESET_STORE],
+  exports: [EMAIL_VERIFICATION_STORE, PASSWORD_RESET_STORE, JwtAuthGuard],
 })
 export class AuthModule {}

@@ -1,6 +1,5 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { ThrottlerGuard } from '@nestjs/throttler';
 import type Redis from 'ioredis';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module';
@@ -9,12 +8,14 @@ import { DomainExceptionFilter } from '../../src/modules/auth/presentation/filte
 
 export const STRONG_PW = 'StrongP@ss1';
 
-/** Boots the real app for e2e, but with rate limiting disabled (no flaky 429s). */
+/**
+ * Boots the real app for e2e. Rate limiting is disabled via the throttler's
+ * `skipIf` (NODE_ENV=test) in AppModule, so no per-IP 429 flakes here.
+ */
 export async function createTestApp(): Promise<INestApplication> {
-  const moduleRef = await Test.createTestingModule({ imports: [AppModule] })
-    .overrideGuard(ThrottlerGuard)
-    .useValue({ canActivate: () => true })
-    .compile();
+  const moduleRef = await Test.createTestingModule({
+    imports: [AppModule],
+  }).compile();
 
   const app = moduleRef.createNestApplication();
   app.useGlobalPipes(

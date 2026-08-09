@@ -34,6 +34,9 @@ import { AuthModule } from './modules/auth/auth.module';
           },
         ],
         storage: new ThrottlerStorageRedisService(redis),
+        // Disable rate limiting under automated tests (NODE_ENV=test) so shared
+        // per-IP counters don't make e2e flaky. Dev/prod are unaffected.
+        skipIf: () => config.get<string>('NODE_ENV') === 'test',
       }),
     }),
     PrismaModule,
