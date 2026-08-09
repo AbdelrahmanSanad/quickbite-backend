@@ -122,12 +122,12 @@ authentication.
 
 ---
 
-## Epic 6: Documentation
+## Epic 6: Documentation ✅
 
-- [ ] Swagger
-- [ ] API Examples
-- [ ] Error Responses
-- [ ] Environment Variables Documentation
+- [x] Swagger — `@nestjs/swagger` at `/docs` (non-production), Bearer auth, CLI plugin
+- [x] API Examples — `@ApiProperty` examples on the request DTOs
+- [x] Error Responses — `@ApiResponse` per endpoint (400/401/403/409/429)
+- [x] Environment Variables Documentation — `services/auth-service/docs/environment.md`
 
 ---
 

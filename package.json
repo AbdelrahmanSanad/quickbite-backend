@@ -18,6 +18,9 @@
     "prettier": "^3.4.2",
     "turbo": "^2.5.0"
   },
+  "overrides": {
+    "js-yaml@5.2.1": "5.2.3"
+  },
   "packageManager": "npm@11.13.0",
   "engines": {
     "node": ">=20"
