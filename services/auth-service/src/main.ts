@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { DomainExceptionFilter } from './modules/auth/presentation/filters/domain-exception.filter';
@@ -34,6 +35,21 @@ async function bootstrap() {
 
   // Map domain errors -> HTTP responses.
   app.useGlobalFilters(new DomainExceptionFilter());
+
+  // Interactive API docs at /docs — non-production only (don't expose the API
+  // surface and schemas publicly).
+  if (config.get<string>('NODE_ENV') !== 'production') {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('QuickBite Auth Service')
+      .setDescription('Authentication, sessions, and password recovery API.')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('docs', app, document, {
+      swaggerOptions: { persistAuthorization: true },
+    });
+  }
 
   // Lets OnApplicationShutdown fire (Redis/Prisma connections close cleanly).
   app.enableShutdownHooks();
