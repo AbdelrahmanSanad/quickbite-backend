@@ -131,22 +131,25 @@ authentication.
 
 ---
 
-## Epic 7: Testing
+## Epic 7: Testing ✅
 
 ### Unit Tests
 
-- [ ] Register
-- [ ] Login
-- [ ] Verify Email
-- [ ] Refresh Token
-- [ ] Forgot Password
-- [ ] Reset Password
+- [x] Register
+- [x] Login
+- [x] Verify Email
+- [x] Refresh Token
+- [x] Forgot Password
+- [x] Reset Password
 
 ### Integration Tests
 
-- [ ] Auth Flow
-- [ ] Session Flow
-- [ ] Password Reset Flow
+- [x] Auth Flow
+- [x] Session Flow
+- [x] Password Reset Flow
+
+> Unit tests run in the CI gate (`turbo run test`); integration tests run as e2e
+> against Postgres + Redis service containers (`test:e2e`) in the same CI job.
 
 ---
 
