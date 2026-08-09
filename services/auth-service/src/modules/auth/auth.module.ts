@@ -1,11 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import type Redis from 'ioredis';
-import {
-  EMAIL_VERIFICATION_STORE,
-  PASSWORD_RESET_STORE,
-  REDIS_CLIENT,
-} from '../../infrastructure/redis/redis.tokens';
+import { REDIS_CLIENT } from '../../infrastructure/redis/redis.tokens';
 import { ForgotPasswordUseCase } from './application/forgot-password.use-case';
 import { LoginUseCase } from './application/login.use-case';
 import { LogoutAllUseCase } from './application/logout-all.use-case';
@@ -15,6 +11,8 @@ import { RegisterUserUseCase } from './application/register-user.use-case';
 import { ResetPasswordUseCase } from './application/reset-password.use-case';
 import { VerifyEmailUseCase } from './application/verify-email.use-case';
 import { ACCESS_TOKEN_SERVICE } from './domain/ports/access-token.service.port';
+import { EMAIL_VERIFICATION_STORE } from './domain/ports/email-verification-store.port';
+import { PASSWORD_RESET_STORE } from './domain/ports/password-reset-store.port';
 import { EVENT_PUBLISHER } from './domain/ports/event-publisher.port';
 import { OTP_GENERATOR } from './domain/ports/otp-generator.port';
 import { PASSWORD_HASHER } from './domain/ports/password-hasher.port';

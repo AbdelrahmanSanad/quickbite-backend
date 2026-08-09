@@ -45,4 +45,71 @@ export default tseslint.config(
       '@typescript-eslint/unbound-method': 'off',
     },
   },
+  // --- Clean Architecture: dependency-direction enforcement ---
+  {
+    // Domain is the core: no frameworks, no infrastructure, no outer layers.
+    files: ['src/modules/*/domain/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@nestjs/*',
+                '@prisma/client',
+                'prisma',
+                'ioredis',
+                'argon2',
+                'joi',
+                'helmet',
+                'express',
+                'class-validator',
+                'class-transformer',
+                '**/application/**',
+                '**/infrastructure/**',
+                '**/presentation/**',
+              ],
+              message:
+                'Domain must not depend on frameworks, infrastructure, or outer layers (Clean Architecture).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Application depends only on the domain (+ Nest DI). No concrete
+    // infrastructure and no presentation.
+    files: ['src/modules/*/application/**/*.ts'],
+    ignores: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@prisma/client',
+                'prisma',
+                'ioredis',
+                'argon2',
+                '@nestjs/jwt',
+                '@nestjs/throttler',
+                '@nestjs/swagger',
+                '@nestjs/config',
+                '@nestjs/event-emitter',
+                'helmet',
+                'express',
+                '**/infrastructure/**',
+                '**/presentation/**',
+              ],
+              message:
+                'Application must depend on domain ports only — not concrete infrastructure or presentation (Clean Architecture).',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

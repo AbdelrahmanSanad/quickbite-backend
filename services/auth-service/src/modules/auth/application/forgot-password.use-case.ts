@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PASSWORD_RESET_STORE } from '../../../infrastructure/redis/redis.tokens';
+import { PASSWORD_RESET_STORE } from '../domain/ports/password-reset-store.port';
 import { PasswordResetRequestedEvent } from '../domain/events/password-reset-requested.event';
 import { EVENT_PUBLISHER } from '../domain/ports/event-publisher.port';
 import type { DomainEventPublisher } from '../domain/ports/event-publisher.port';

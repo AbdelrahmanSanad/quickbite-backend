@@ -13,3 +13,6 @@ export interface EmailVerificationCodeStore {
   incrementAttempts(userId: string): Promise<number>;
   consume(userId: string): Promise<void>;
 }
+
+/** DI token — the port lives in the domain, adapters implement it. */
+export const EMAIL_VERIFICATION_STORE = Symbol('EMAIL_VERIFICATION_STORE');

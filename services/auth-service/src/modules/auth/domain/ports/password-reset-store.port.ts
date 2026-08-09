@@ -13,3 +13,6 @@ export interface PasswordResetCodeStore {
   incrementAttempts(userId: string): Promise<number>;
   consume(userId: string): Promise<void>;
 }
+
+/** DI token — the port lives in the domain, adapters implement it. */
+export const PASSWORD_RESET_STORE = Symbol('PASSWORD_RESET_STORE');
