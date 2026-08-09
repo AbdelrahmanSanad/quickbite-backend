@@ -2,7 +2,7 @@ name: CI
 
 # Runs the quality gate on every PR into a long-lived branch, and on pushes
 # to development. Mirrors the local pre-push hook (lint · build/type-check · test)
-# so nothing reaches development without passing.
+# plus integration (e2e) tests against real Postgres + Redis.
 on:
   pull_request:
     branches: [development, main, master]
@@ -24,6 +24,44 @@ jobs:
   quality:
     name: quality
     runs-on: ubuntu-latest
+
+    # Infrastructure for the integration (e2e) tests.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: quickbite
+          POSTGRES_PASSWORD: quickbite_dev_pw
+          POSTGRES_DB: auth_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U quickbite"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    # Consumed by the app (env validation) during migrate + e2e.
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://quickbite:quickbite_dev_pw@localhost:5432/auth_db?schema=public
+      REDIS_URL: redis://localhost:6379
+      JWT_ACCESS_SECRET: ci-test-access-secret-0123456789
+      JWT_ACCESS_TTL: "900"
+      REFRESH_TTL: "604800"
+      CORS_ORIGINS: http://localhost:3000
+      THROTTLE_TTL: "60"
+      THROTTLE_LIMIT: "100"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,8 +75,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # CI starts clean, so the Prisma client must be generated before the
-      # TypeScript build can type-check the code that imports it.
       - name: Generate Prisma client
         run: npm run db:generate -w @quickbite/auth-service
 
@@ -48,5 +84,11 @@ jobs:
       - name: Build & type-check
         run: npx turbo run build
 
-      - name: Test
+      - name: Unit tests
         run: npx turbo run test
+
+      - name: Apply DB migrations (e2e)
+        run: npm run db:deploy -w @quickbite/auth-service
+
+      - name: Integration (e2e) tests
+        run: npm run test:e2e -w @quickbite/auth-service
