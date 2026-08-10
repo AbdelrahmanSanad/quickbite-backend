@@ -417,7 +417,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
 > pass, then **STOP** for developer review. Order respects dependencies.
 
 ### Task 1 — Restaurant Service bootstrap
-- [ ] status
+- [x] status
 - **Objective:** scaffold `services/restaurant-service` (NestJS 11) as a
   workspace package (`@quickbite/restaurant-service`), mirroring auth-service
   (scripts, tsconfig, eslint incl. the architecture rules, `.env`/`.env.example`,
