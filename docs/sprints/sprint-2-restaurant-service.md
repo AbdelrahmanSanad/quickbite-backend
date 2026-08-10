@@ -431,7 +431,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
 - **Tests:** scaffold spec passes.
 
 ### Task 2 — PostgreSQL / Prisma setup
-- [ ] status
+- [x] status
 - **Objective:** Prisma wired to `restaurant_db`; `PrismaService`/`PrismaModule`
   (auth-service pattern); env validated (Joi) with `DATABASE_URL`, `REDIS_URL`,
   `JWT_ACCESS_SECRET`, throttle/CORS.

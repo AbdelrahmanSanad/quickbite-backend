@@ -1,0 +1,17 @@
+// Restaurant Service database schema.
+// Owns restaurant_db only — never reads another service's database.
+// Domain models (Restaurant/Branch/Category/Product) are added in Task 3.
+
+generator client {
+  provider = "prisma-client-js"
+  // Service-local output so this client never collides with another service's
+  // in the hoisted node_modules (monorepo isolation). Placed at the service
+  // root (not under src) so the relative import resolves identically from src
+  // and dist. Gitignored; produced by the turbo `db:generate` task.
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

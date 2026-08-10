@@ -1,9 +1,11 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
 
   // Reject unknown/invalid fields and transform payloads into DTO instances.
   app.useGlobalPipes(
@@ -14,9 +16,9 @@ async function bootstrap() {
     }),
   );
 
-  // Lets OnApplicationShutdown fire (DB/Redis connections close cleanly later).
+  // Lets OnApplicationShutdown fire (DB/Redis connections close cleanly).
   app.enableShutdownHooks();
 
-  await app.listen(process.env.PORT ?? 3002);
+  await app.listen(Number(config.getOrThrow('PORT')));
 }
 void bootstrap();
