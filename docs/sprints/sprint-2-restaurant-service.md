@@ -458,7 +458,14 @@ category/restaurant (403); stale cache after write (must be invalidated);
   `restaurant_db`.
 
 ### Task 4 — Shared auth lib + AuthN/AuthZ integration
-- [ ] status
+- [x] status
+
+> **Deferred to Task 5 (from code review):** add a supertest e2e for the auth
+> guard/module wiring (no token → 401, wrong role → 403, owner → 200) on the
+> first real protected endpoint — the DI path is currently proven by unit tests
+> + a manual smoke test only. **Follow-ups tracked:** migrate auth-service onto
+> `@quickbite/nest-auth` (single source for the token contract); RS256-static
+> signing before a 3rd service inherits the shared secret.
 - **Objective:** per §2 Option A, create `libs/nest-auth` (`JwtAuthGuard`,
   `@CurrentUser`, `RolesGuard`, `@Roles`, `AuthenticatedUser`) and consume it in
   Restaurant Service. (Refactor auth-service to consume it too **only if low
