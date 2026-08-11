@@ -19,6 +19,17 @@ npm run test  -w @quickbite/restaurant-service   # unit
 npm run test:e2e -w @quickbite/restaurant-service
 ```
 
+## Database migrations
+
+⚠️ **Migrations are hand-authored + applied with `prisma migrate deploy` only.**
+Do **not** run `prisma migrate dev` on this service: the `categories` partial-unique
+index (`(restaurant_id, name) WHERE deleted_at IS NULL`) and any other raw-SQL
+constraints live in the migration files but **cannot** be expressed in
+`schema.prisma`, so `migrate dev` would detect "drift" and generate a migration
+that **drops** them — silently removing the duplicate-category-name guarantee.
+Author new migrations by hand (or via `prisma migrate diff --script`) and apply
+with `npm run db:deploy`.
+
 Implementation follows the Sprint 2 plan
 (`docs/sprints/sprint-2-restaurant-service.md`), one task at a time via the
 `restaurant-sprint` skill.

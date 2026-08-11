@@ -254,6 +254,17 @@ restaurant_db
   products, all non-deleted, ordered by `sortOrder`); ownership check
   (resource → restaurant.owner_id); list by parent id.
 
+> **Soft-delete read rule (Tasks 5–9):** `deletedAt` does **not** cascade —
+> soft-deleting a parent leaves children with `deletedAt IS NULL`. Every read
+> must therefore filter `deletedAt IS NULL` **up the full ownership chain**
+> (product → category → restaurant), not just on the row itself, or soft-deleted
+> parents' children leak. Use a shared "active + ancestors active" query helper,
+> and cover it with the soft-deleted-parent e2e test (§15).
+
+> **Deferred to Task 8:** an optional DB-level `CHECK (price > 0)` on `products`
+> (defense-in-depth beyond the DTO validation) — add as a new migration, since
+> the init migration is already applied.
+
 ```text
 Restaurant.ownerId  →  User ID from Auth Service
 No cross-database foreign key. (ownerId is a plain, indexed UUID column.)
@@ -439,7 +450,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
   deploy work against `restaurant_db`.
 
 ### Task 3 — Domain schema + migration
-- [ ] status
+- [x] status
 - **Objective:** author the Prisma schema (§3/§9) — Restaurant, Branch, Category,
   Product; enums; indexes; partial-unique category name; soft delete. Create the
   migration.

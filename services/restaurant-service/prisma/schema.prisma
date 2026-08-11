@@ -1,6 +1,5 @@
 // Restaurant Service database schema.
 // Owns restaurant_db only — never reads another service's database.
-// Domain models (Restaurant/Branch/Category/Product) are added in Task 3.
 
 generator client {
   provider = "prisma-client-js"
@@ -14,4 +13,95 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+/// A restaurant business, owned by a RESTAURANT_OWNER (ownerId = Auth user UUID).
+model Restaurant {
+  id          String           @id @default(uuid()) @db.Uuid
+  // Auth user UUID. NO cross-database foreign key — plain indexed column.
+  ownerId     String           @map("owner_id") @db.Uuid
+  name        String           @db.VarChar(150)
+  description String?          @db.Text
+  status      RestaurantStatus @default(ACTIVE)
+  phone       String?          @db.VarChar(30)
+  email       String?          @db.VarChar(255)
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  branches   Branch[]
+  categories Category[]
+
+  @@index([ownerId])
+  @@index([status])
+  @@map("restaurants")
+}
+
+/// A physical location of a restaurant.
+model Branch {
+  id           String  @id @default(uuid()) @db.Uuid
+  restaurantId String  @map("restaurant_id") @db.Uuid
+  name         String  @db.VarChar(150)
+  address      String  @db.Text
+  phone        String? @db.VarChar(30)
+  isActive     Boolean @default(true) @map("is_active")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([restaurantId])
+  @@map("branches")
+}
+
+/// Groups products within a restaurant's menu.
+model Category {
+  id           String @id @default(uuid()) @db.Uuid
+  restaurantId String @map("restaurant_id") @db.Uuid
+  name         String @db.VarChar(100)
+  sortOrder    Int    @default(0) @map("sort_order")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  products   Product[]
+
+  // A partial-unique index on (restaurant_id, name) WHERE deleted_at IS NULL is
+  // added in the migration SQL (Prisma can't express partial-unique in-schema),
+  // so a soft-deleted category's name can be reused. Duplicate names are also
+  // rejected at the application layer (409) in Task 7.
+  @@index([restaurantId])
+  @@map("categories")
+}
+
+/// A menu item with a single price (price does not vary by branch — MVP).
+model Product {
+  id          String  @id @default(uuid()) @db.Uuid
+  categoryId  String  @map("category_id") @db.Uuid
+  name        String  @db.VarChar(150)
+  description String? @db.Text
+  price       Decimal @db.Decimal(10, 2)
+  isAvailable Boolean @default(true) @map("is_available")
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+enum RestaurantStatus {
+  ACTIVE
+  SUSPENDED
+
+  @@map("restaurant_status")
 }
