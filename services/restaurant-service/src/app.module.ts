@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { NestAuthModule } from '@quickbite/nest-auth';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { envValidationSchema } from './config/env.validation';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
-import { ProbeController } from './probe/probe.controller';
+import { RestaurantModule } from './modules/restaurant/restaurant.module';
 
 @Module({
   imports: [
@@ -15,9 +14,9 @@ import { ProbeController } from './probe/probe.controller';
       validationOptions: { abortEarly: false },
     }),
     PrismaModule,
-    NestAuthModule,
+    RestaurantModule,
   ],
-  controllers: [AppController, ProbeController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

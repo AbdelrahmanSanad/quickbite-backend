@@ -474,12 +474,21 @@ category/restaurant (403); stale cache after write (must be invalidated);
   no/invalid token (401) and wrong role (403); unit tests for guard + roles.
 
 ### Task 5 — Restaurant CRUD + ownership
-- [ ] status
+- [x] status
 - **Objective:** Clean-Architecture Restaurant module (domain/application/
   infrastructure/presentation): create/get/update/soft-delete; `ownerId` from
   JWT; ownership + role enforced; domain errors + filter.
 - **Acceptance:** contracts in §11 behave; ownership/role edge cases covered by
   unit tests.
+
+> **Done:** 4 endpoints (POST/GET/PATCH/DELETE `/restaurants`), `ownerId` from
+> JWT only, ADMIN ownership bypass, soft-delete→404, `deletedAt` hidden. 13 unit
+> + 16 e2e tests (the deferred Task-4 guard-wiring matrix now runs on the real
+> `POST /restaurants`). Probe controller removed. **No schema change.**
+> **Deferred (code review, non-blocking):** strict phone-format validation (§12);
+> scoping `update`/`softDelete` with `deletedAt IS NULL` to close a benign
+> concurrent-delete read-after-write window; reconciling the `null`-clears
+> contract between the repo port and the DTOs. e2e CI wiring is Task 12.
 
 ### Task 6 — Branch management
 - [ ] status
@@ -532,15 +541,15 @@ category/restaurant (403); stale cache after write (must be invalidated);
 
 ## 17. Definition of Done
 
-- [ ] Restaurant Service runs independently
-- [ ] Restaurant DB isolated from Auth DB (no cross-DB FK; `ownerId` is a plain UUID)
-- [ ] Restaurant CRUD works
+- [x] Restaurant Service runs independently
+- [x] Restaurant DB isolated from Auth DB (no cross-DB FK; `ownerId` is a plain UUID)
+- [x] Restaurant CRUD works
 - [ ] Branch CRUD works
 - [ ] Category CRUD works
 - [ ] Product CRUD works
-- [ ] Authentication enforced (JWT)
-- [ ] Authorization enforced (role)
-- [ ] Ownership checks enforced
+- [x] Authentication enforced (JWT)
+- [x] Authorization enforced (role)
+- [x] Ownership checks enforced
 - [ ] Redis caching implemented where justified (menu)
 - [ ] Cache invalidation works
 - [ ] Validation works
