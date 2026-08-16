@@ -49,6 +49,16 @@ export class DuplicateCategoryError extends DomainError {
 }
 
 /**
+ * No product with that id exists, it has been soft-deleted, or its category or
+ * the category's restaurant has been soft-deleted (invisible up the chain).
+ */
+export class ProductNotFoundError extends DomainError {
+  constructor() {
+    super('Product not found');
+  }
+}
+
+/**
  * The authenticated owner is not the owner of the target restaurant (and is not
  * an ADMIN). Never reveals another owner's data — only that access is denied.
  */

@@ -11,6 +11,7 @@ import {
   DomainError,
   DuplicateCategoryError,
   ForbiddenOwnershipError,
+  ProductNotFoundError,
   RestaurantNotFoundError,
 } from '../../domain/errors/domain.error';
 
@@ -36,7 +37,8 @@ export class DomainExceptionFilter implements ExceptionFilter {
     if (
       exception instanceof RestaurantNotFoundError ||
       exception instanceof BranchNotFoundError ||
-      exception instanceof CategoryNotFoundError
+      exception instanceof CategoryNotFoundError ||
+      exception instanceof ProductNotFoundError
     ) {
       return HttpStatus.NOT_FOUND;
     }

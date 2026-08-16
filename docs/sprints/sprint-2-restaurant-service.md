@@ -522,10 +522,23 @@ category/restaurant (403); stale cache after write (must be invalidated);
 > writes is a TODO hook for Task 9.
 
 ### Task 8 — Product management
-- [ ] status
+- [x] status
 - **Objective:** Product CRUD (§7) under a category; price validation; ownership
   via category → restaurant.
 - **Acceptance:** invalid price → 400; cross-restaurant product → 403; unit tests.
+
+> **Done:** 5 endpoints (nested POST/GET + flat GET/PATCH/DELETE). **Price** is a
+> Decimal(10,2): DTO validates `> 0`, `≤ 2dp`, `≤ 1_000_000`; the response echoes
+> a canonical 2dp **string** ("12.50", via `Decimal.toFixed(2)`) — money never a
+> float, no Prisma.Decimal leaks past infrastructure. **Two-level** ownership +
+> soft-delete chain (product → category → restaurant); create/list reuse
+> `CategoryRepository.findByIdWithOwner`. New `ProductNotFound`→404 (no 409 —
+> products have no unique constraint). **Schema change:** a new hand-authored
+> migration adds `CHECK (price > 0)` (defense-in-depth, §9), applied via
+> `migrate deploy` and verified in `restaurant_db`. 16 unit + 12 e2e (price
+> 0/neg/3dp/over-max/non-number → 400, price echo, two-level soft-delete → 404).
+> **Deferred (review NIT):** number→Decimal safety depends on the `@Max` bound
+> (documented). Menu-cache invalidation on product writes is a TODO hook for Task 9.
 
 ### Task 9 — Menu endpoint + Redis cache + invalidation
 - [ ] status
@@ -567,7 +580,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
 - [x] Restaurant CRUD works
 - [x] Branch CRUD works
 - [x] Category CRUD works
-- [ ] Product CRUD works
+- [x] Product CRUD works
 - [x] Authentication enforced (JWT)
 - [x] Authorization enforced (role)
 - [x] Ownership checks enforced
