@@ -491,9 +491,18 @@ category/restaurant (403); stale cache after write (must be invalidated);
 > contract between the repo port and the DTOs. e2e CI wiring is Task 12.
 
 ### Task 6 — Branch management
-- [ ] status
+- [x] status
 - **Objective:** Branch CRUD scoped to the owner's restaurant (§5).
 - **Acceptance:** owner-only writes; cross-owner attempts → 403; unit tests.
+
+> **Done:** 5 endpoints (nested POST/GET under `/restaurants/:restaurantId/branches`
+> + flat GET/PATCH/DELETE `/branches/:id`). Ownership resolves **up the chain**
+> (`branch.restaurant.ownerId`) via a single-query `findByIdWithOwner`; `ownership.ts`
+> generalized to `assertActorOwns`. **Soft-delete up the chain** enforced in every
+> branch read (`deletedAt IS NULL` on branch AND parent) — covered by the §15 e2e.
+> New `BranchNotFoundError`→404. 16 unit + 12 e2e added. **No schema change.**
+> **Deferred (review NIT):** whitespace-only name/address (tracks the Task-5 phone
+> decision); public reads intentionally expose `isActive:false` branches.
 
 ### Task 7 — Category management
 - [ ] status
@@ -544,7 +553,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
 - [x] Restaurant Service runs independently
 - [x] Restaurant DB isolated from Auth DB (no cross-DB FK; `ownerId` is a plain UUID)
 - [x] Restaurant CRUD works
-- [ ] Branch CRUD works
+- [x] Branch CRUD works
 - [ ] Category CRUD works
 - [ ] Product CRUD works
 - [x] Authentication enforced (JWT)

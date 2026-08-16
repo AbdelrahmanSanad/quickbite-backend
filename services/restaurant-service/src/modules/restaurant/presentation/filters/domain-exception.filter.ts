@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
+  BranchNotFoundError,
   DomainError,
   ForbiddenOwnershipError,
   RestaurantNotFoundError,
@@ -30,7 +31,10 @@ export class DomainExceptionFilter implements ExceptionFilter {
   }
 
   private statusFor(exception: DomainError): number {
-    if (exception instanceof RestaurantNotFoundError) {
+    if (
+      exception instanceof RestaurantNotFoundError ||
+      exception instanceof BranchNotFoundError
+    ) {
       return HttpStatus.NOT_FOUND;
     }
     if (exception instanceof ForbiddenOwnershipError) {

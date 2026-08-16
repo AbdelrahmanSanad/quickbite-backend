@@ -15,15 +15,21 @@ export interface Actor {
 const ADMIN_ROLE = 'ADMIN';
 
 /**
- * Ownership rule for every restaurant write: the actor must own the restaurant,
- * unless they are an ADMIN. Throws {@link ForbiddenOwnershipError} (→ 403)
- * otherwise. Never trusts an owner id from the request — only the loaded row.
+ * Core ownership rule: the actor must own the resource (identified by its
+ * resolved `ownerId`), unless they are an ADMIN. Throws
+ * {@link ForbiddenOwnershipError} (→ 403) otherwise. The `ownerId` is always
+ * resolved from persisted data — never trusted from the request.
  */
-export function assertCanManage(restaurant: Restaurant, actor: Actor): void {
+export function assertActorOwns(ownerId: string, actor: Actor): void {
   if (actor.role === ADMIN_ROLE) {
     return;
   }
-  if (restaurant.ownerId !== actor.userId) {
+  if (ownerId !== actor.userId) {
     throw new ForbiddenOwnershipError();
   }
+}
+
+/** Ownership rule for a restaurant aggregate root (delegates to the core rule). */
+export function assertCanManage(restaurant: Restaurant, actor: Actor): void {
+  assertActorOwns(restaurant.ownerId, actor);
 }

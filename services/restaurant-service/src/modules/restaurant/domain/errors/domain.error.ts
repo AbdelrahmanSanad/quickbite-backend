@@ -18,11 +18,21 @@ export class RestaurantNotFoundError extends DomainError {
 }
 
 /**
+ * No branch with that id exists, it has been soft-deleted, or its parent
+ * restaurant has been soft-deleted (a branch is invisible once its parent is).
+ */
+export class BranchNotFoundError extends DomainError {
+  constructor() {
+    super('Branch not found');
+  }
+}
+
+/**
  * The authenticated owner is not the owner of the target restaurant (and is not
  * an ADMIN). Never reveals another owner's data — only that access is denied.
  */
 export class ForbiddenOwnershipError extends DomainError {
   constructor() {
-    super('You do not have permission to modify this restaurant');
+    super('You do not have permission to modify this resource');
   }
 }
