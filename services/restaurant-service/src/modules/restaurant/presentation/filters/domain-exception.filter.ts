@@ -7,7 +7,9 @@ import {
 import { Response } from 'express';
 import {
   BranchNotFoundError,
+  CategoryNotFoundError,
   DomainError,
+  DuplicateCategoryError,
   ForbiddenOwnershipError,
   RestaurantNotFoundError,
 } from '../../domain/errors/domain.error';
@@ -33,12 +35,16 @@ export class DomainExceptionFilter implements ExceptionFilter {
   private statusFor(exception: DomainError): number {
     if (
       exception instanceof RestaurantNotFoundError ||
-      exception instanceof BranchNotFoundError
+      exception instanceof BranchNotFoundError ||
+      exception instanceof CategoryNotFoundError
     ) {
       return HttpStatus.NOT_FOUND;
     }
     if (exception instanceof ForbiddenOwnershipError) {
       return HttpStatus.FORBIDDEN;
+    }
+    if (exception instanceof DuplicateCategoryError) {
+      return HttpStatus.CONFLICT;
     }
     return HttpStatus.BAD_REQUEST;
   }

@@ -505,9 +505,21 @@ category/restaurant (403); stale cache after write (must be invalidated);
 > decision); public reads intentionally expose `isActive:false` branches.
 
 ### Task 7 — Category management
-- [ ] status
+- [x] status
 - **Objective:** Category CRUD (§6) incl. duplicate-name 409 and `sortOrder`.
 - **Acceptance:** duplicate category → 409; ownership enforced; unit tests.
+
+> **Done:** 5 endpoints (nested POST/GET + flat GET/PATCH/DELETE). **Duplicate
+> live name → 409** on create AND rename, via the Task-3 partial-unique index
+> (`(restaurant_id, name) WHERE deleted_at IS NULL`) — a narrow P2002→
+> `DuplicateCategoryError` translation confined to the repository (all other
+> errors rethrow). Soft-deleted name is reusable (partial index). `sortOrder`
+> ordering (`sortOrder` then `name`), ownership chain + soft-delete-up-the-chain
+> as Task 6. 16 unit + 13 e2e (incl. dup→409, soft-deleted-name-reuse→201,
+> rename-collision→409, ordering). **No schema change.**
+> **Deferred (review NIT):** empty-PATCH no-op bumps updatedAt; name trimming
+> (tracks the Task-5/6 whitespace decision). Menu-cache invalidation on category
+> writes is a TODO hook for Task 9.
 
 ### Task 8 — Product management
 - [ ] status
@@ -554,7 +566,7 @@ category/restaurant (403); stale cache after write (must be invalidated);
 - [x] Restaurant DB isolated from Auth DB (no cross-DB FK; `ownerId` is a plain UUID)
 - [x] Restaurant CRUD works
 - [x] Branch CRUD works
-- [ ] Category CRUD works
+- [x] Category CRUD works
 - [ ] Product CRUD works
 - [x] Authentication enforced (JWT)
 - [x] Authorization enforced (role)
